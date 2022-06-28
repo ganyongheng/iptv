@@ -1,0 +1,139 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /snm_boss
+
+spring:
+  mvc:
+    pathmatch:
+      #这个swagger2与springboot版本不兼容必须配置
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: newiptv
+  redis:
+    host: 10.5.24.48
+    port: 16379
+    password: gdsnm2019
+    timeout: 5000ms # 连接超时时间（毫秒）
+    lettuce:
+      pool:
+        max-active: 20 # 连接池最大连接数（使用负值表示没有限制）
+        max-idle: 10 # 连接池中的最大空闲连接
+        min-idle: 5 # 连接池中的最小空闲连接
+        max-wait: 5000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+
+  thymeleaf:
+    mode: HTML5
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    cache: false #开发时关闭缓存,不然没法看到实时页面
+mybatis-plus:
+  type-aliases-package: com.snm.iptv.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    #    #打印sql到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations:
+  - classpath:mapper/*.xml
+  - classpath*:com/**/mapper/*.xml
+
+logging:
+  level:
+    root: info
+    com: debug
+  config: classpath:logback-spring-test.xml
+
+#SyncRightsTimerTask定时任务参数配置
+SyncRightsTimerTask:
+  #定时任务启动时间
+  cron: 0 0/1 * * * ?
+#MobileOrderDetShipTask个性月自动续费定时任务
+MobileOrderDetShipTask:
+  cron: 0 0 20 * * ?
+#MobilePersonalAccountTask个性月自动续费定时任务
+MobilePersonalAccountTask:
+  cron: 0 0 16 * * ?
+#CacheRedisVuidTask缓存Vuid定时任务
+CacheRedisVuidTask:
+  cron: 0 0/5 * * * ?
+#MobileOrderFailReSendTask订单重发定时任务
+MobileOrderFailReSendTask:
+  cron: 0/10 * * * * ?
+#MobileOrderSingleFailReSendTask订单新流程重发定时任务
+MobileOrderSingleFailReSendTask:
+  cron: 0/10 * * * * ?
+#SyncTokenToMobileTask同步token定时任务
+SyncTokenToMobileTask:
+  cron: 0 0/10 * * * ?
+#UpdateLocalTxTokenTask更新本地token定时任务
+UpdateLocalTxTokenTask:
+  cron: 0 0/30 * * * ?
+
+sys-config:
+  #腾讯获取token参数
+  TX_ACCESS_TOKEN_URL: https://tv.video.qq.com/i-tvbin/open/get_token?version=1&format=json
+  TX_APPID: 7lhj5m3roovihoxx
+  TX_APPKEY: 1Gpq4NnL2jF0Fwl2ajsp1j8zcsVd3wPy
+  #单位秒
+  TX_ACCESS_TOKEN_EXPIRETIME: 5400
+  TX_CREATE_ORDER_URL: https://tv.video.qq.com/i-tvbin/open/create_order?version=1&format=json
+  TX_CONFIRM_ORDER_URL: https://tv.video.qq.com/i-tvbin/open/confirm_order?version=1&format=json
+  TX_VIP_INFO_URL: https://tv.video.qq.com/i-tvbin/open/vip_info
+  TX_VUID_URL: https://tv.video.qq.com/i-tvbin/open/get_vuid
+  TX_Q_UA: PT=SNMOPT&CHID=16147&TVKPlatform=1170603
+  VENDOR_PLATFORM: 1170603
+  #爱奇艺获取会员信息地址
+  AIQIYI_VIP_INFO_URL: http://gd-ctcc-iptv-snm-q.sdk.kingnut.cn/user.action
+  #爱奇艺发货接口地址
+  AIQIYI_CONFIRM_ORDER_URL: http://gd-ctcc-iptv-snm-q.sdk.kingnut.cn/syncOrder
+  SYNC_TOKEN_TO_MOBILE_URL: http://183.235.16.75:8087/aaa/Service/AccessTokenUpdate
+  #重发间隔 单位秒
+  MobileOrderResend_Interval: 30
+  MobileOrderResendDequeueTask_DequeueNums: 100
+  MobileOrderResend_Max_Nums: 5
+  MobileDoAccountSwitch:
+  #告警配置 本地测试环境告警地址是错误的
+  IncidentPush_Url: http://14.23.85.231:20040/mps/incidentPushErroMsg111111222233
+  IncidentPush_Appid: tecent
+  IncidentPush_Appkey: dajkR12HJK
+  IncidentPush_Incidentcode: network_error
+  IncidentPush_HttpErrorMaxCount:
+  IncidentPush_HttpErrorPerTime:
+  Local_Ip: 120.0.0.1
+  Channel_Ids: snm_yidong#620d7d0564675565&&snm_dianxin#3cb902d87b7db983&&ytvjg_henanyd#2dc2f1705ef7a69e
+  Vip_Bid: basic#115&&mix#114
+  #爱奇艺合作方编号
+  AIQIYI_PARTNER_NO: 90635829
+  #爱奇艺发货接口版本
+  AIQIYI_SYNCORDER_VERSION: 1.0
+  #爱奇艺获取会员信息接口版本
+  AIQIYI_GET_VIP_INFO_VERSION: 1.0
+  #订单状态回调通知最大次数
+  syncRightsTime_Max_Nums: 3
+  #每次从队列取的个数
+  syncRightsTimer_DequeueNums: 10000
+  #延迟取数据的时间(分钟)
+  syncRightsTimer_DelayTime: 5
+  #爱奇艺鉴权密钥
+  pubkey: fbfa83af
+
+  #优酷请求发货url
+  YOUKU_CONFIRM_ORDER_URL: https://ott-api.youku.com/gateway/request.do
+  YOUKU_APPKEY: cusgcw8tjgl7448l
+  YOUKU_APPSECRET: 9k4jazvipn0p6j4oi3gey9wylun0wseb
+  YOUKU_SIGNTYPE: MD5
+  #优酷发货接口地址
+  YOUKU_CONFIRM_ORDER_INTERFACE: ott.kitty.commonorder.sync
+#sawgger开关，true可访问，false不可访问
+swagger:
+  is:
+    enable: true
+
+ZNYX:
+  GET_MSG_URL: https:jkdsjkjhkjhjhj
+  CHECK_MSG_URL: https:jkdsjkjhkjhjhj
+  #订购关系同步重试次数
+  SYNC_ACCOUNT_NUMS: 3
+  #订购关系同步定时任务一次查询数量
+  SYNC_ACCOUNT_SELECTNUMS: 300
