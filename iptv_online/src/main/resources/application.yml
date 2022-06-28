@@ -2,7 +2,7 @@ spring:
   profiles:
     #打包时查看config.sh文件的JAVA_OPTS属性active激活对应的配置文件
     active:
-      test
+      product
     #需要引入的配置文件
     include:
       druid-dev
